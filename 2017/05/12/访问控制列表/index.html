@@ -87,38 +87,21 @@
 
 
 
-<meta name="description" content="通过脚本模拟网站登录(发送http数据包)的作用有以下几点：
-
-web类安全工具需要一个强大的爬虫爬取目标网站的所有页面，以确认漏洞利用点。如果遇到需要登录才能爬取的情况，可以爬虫直接模拟登录过程。
-已知部分信息，爆破网站后台，为下一步的渗透做准备。">
+<meta name="description" content="访问控制列表(Access Control List，ACL) 是路由器和交换机接口的指令列表，用来控制端口进出的数据包。ACL适用于所有的被路由协议，如IP、IPX、AppleTalk等。
+信息点间通信和内外网络的通信都是企业网络中必不可少的业务需求，为了保证内网的安全性，需要通过安全策略来保障非授权用户只能访问特定的网络资源，从而达到对访问进行控制的目的。简而言之，ACL可以过滤网络中的流量">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浅谈爆破">
-<meta property="og:url" content="http://Jewel591.github.io/2017/03/26/浅谈爆破/index.html">
+<meta property="og:title" content="访问控制列表">
+<meta property="og:url" content="http://Jewel591.github.io/2017/05/12/访问控制列表/index.html">
 <meta property="og:site_name" content="J'S BLOG">
-<meta property="og:description" content="通过脚本模拟网站登录(发送http数据包)的作用有以下几点：
-
-web类安全工具需要一个强大的爬虫爬取目标网站的所有页面，以确认漏洞利用点。如果遇到需要登录才能爬取的情况，可以爬虫直接模拟登录过程。
-已知部分信息，爆破网站后台，为下一步的渗透做准备。">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruter00111.jpg">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard2.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard3.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard4.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard5.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard6.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard7.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard8.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard9.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard10.png">
-<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard11.png">
-<meta property="og:updated_time" content="2017-03-26T11:53:43.081Z">
+<meta property="og:description" content="访问控制列表(Access Control List，ACL) 是路由器和交换机接口的指令列表，用来控制端口进出的数据包。ACL适用于所有的被路由协议，如IP、IPX、AppleTalk等。
+信息点间通信和内外网络的通信都是企业网络中必不可少的业务需求，为了保证内网的安全性，需要通过安全策略来保障非授权用户只能访问特定的网络资源，从而达到对访问进行控制的目的。简而言之，ACL可以过滤网络中的流量">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_5_ACL321880-0.jpg">
+<meta property="og:updated_time" content="2017-05-12T13:03:16.011Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅谈爆破">
-<meta name="twitter:description" content="通过脚本模拟网站登录(发送http数据包)的作用有以下几点：
-
-web类安全工具需要一个强大的爬虫爬取目标网站的所有页面，以确认漏洞利用点。如果遇到需要登录才能爬取的情况，可以爬虫直接模拟登录过程。
-已知部分信息，爆破网站后台，为下一步的渗透做准备。">
-<meta name="twitter:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruter00111.jpg">
+<meta name="twitter:title" content="访问控制列表">
+<meta name="twitter:description" content="访问控制列表(Access Control List，ACL) 是路由器和交换机接口的指令列表，用来控制端口进出的数据包。ACL适用于所有的被路由协议，如IP、IPX、AppleTalk等。
+信息点间通信和内外网络的通信都是企业网络中必不可少的业务需求，为了保证内网的安全性，需要通过安全策略来保障非授权用户只能访问特定的网络资源，从而达到对访问进行控制的目的。简而言之，ACL可以过滤网络中的流量">
+<meta name="twitter:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_5_ACL321880-0.jpg">
 
 
 
@@ -146,13 +129,13 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
 
 
 
-  <link rel="canonical" href="http://Jewel591.github.io/2017/03/26/浅谈爆破/"/>
+  <link rel="canonical" href="http://Jewel591.github.io/2017/05/12/访问控制列表/"/>
 
 
 
 
 
-  <title> 浅谈爆破 | J'S BLOG </title>
+  <title> 访问控制列表 | J'S BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -319,7 +302,7 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://Jewel591.github.io/2017/03/26/浅谈爆破/">
+    <link itemprop="mainEntityOfPage" href="http://Jewel591.github.io/2017/05/12/访问控制列表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jewel591">
@@ -340,7 +323,7 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
             
             
               
-                浅谈爆破
+                访问控制列表
               
             
           </h1>
@@ -355,8 +338,8 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-26T19:42:53+08:00">
-                2017-03-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T20:59:46+08:00">
+                2017-05-12
               </time>
             
 
@@ -365,28 +348,6 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DVWA/" itemprop="url" rel="index">
-                    <span itemprop="name">DVWA</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -413,49 +374,30 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
       
 
       
-        <p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruter00111.jpg" alt=""></p>
-<blockquote>
-<p>通过脚本模拟网站登录(发送http数据包)的作用有以下几点：</p>
-<ul>
-<li>web类安全工具需要一个强大的爬虫爬取目标网站的所有页面，以确认漏洞利用点。<br>如果遇到需要登录才能爬取的情况，可以爬虫直接模拟登录过程。</li>
-<li>已知部分信息，爆破网站后台，为下一步的渗透做准备。</li>
+        <p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_5_ACL321880-0.jpg" alt="image"></p>
+<p><strong>访问控制列表</strong>(Access Control List，ACL) 是路由器和交换机接口的指令列表，用来控制端口进出的数据包。ACL适用于所有的被路由协议，如IP、IPX、AppleTalk等。</p>
+<p>信息点间通信和内外网络的通信都是企业网络中必不可少的业务需求，为了保证内网的安全性，需要通过安全策略来保障非授权用户只能访问特定的网络资源，从而达到对访问进行控制的目的。简而言之，ACL可以过滤网络中的流量，是控制访问的一种网络技术手段。</p>
+<p>配置ACL后，可以限制网络流量，允许特定设备访问，指定转发特定端口数据包等。如可以配置ACL，禁止局域网内的设备访问外部公共网络，或者只能使用FTP服务。ACL既可以在路由器上配置，也可以在具有ACL功能的业务软件上进行配置。</p>
+<p>ACL是物联网中保障系统安全性的重要技术，在设备硬件层安全基础上，通过对在软件层面对设备间通信进行访问控制，使用可编程方法指定访问规则，防止非法设备破坏系统安全，非法获取系统数据。<br><a id="more"></a></p>
+<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ul>
+<li>限制网络流量、提高网络性能。</li>
+<li>提供对通信流量的控制手段。</li>
+<li>提供网络访问的基本安全手段。</li>
+<li>在网络设备接口处，决定哪种类型的通信流量被转发、哪种类型的通信流量被阻塞。</li>
 </ul>
-</blockquote>
-<a id="more"></a>
-<h2 id="HTTP基础"><a href="#HTTP基础" class="headerlink" title="HTTP基础"></a>HTTP基础</h2><blockquote>
-<p>Http中的<strong>response</strong>和<strong>request</strong>是相对浏览器来说的。浏览器发送request，服务器返回response。<br><strong>Get</strong>和<strong>Post</strong>：get放在url中，而post放在http的body中。<br><strong>http_referer</strong>:是http中header的一部分，向浏览器发送请求时，一般会带上referer，告诉服务器我是从哪个页面链接而来，为服务器处理提供一些信息。</p>
-</blockquote>
-<h2 id="原理介绍："><a href="#原理介绍：" class="headerlink" title="原理介绍："></a>原理介绍：</h2><blockquote>
-<p>爆破的原理就是使用提供的用户和密码字典一个一个去尝试，每次向服务器发起请求不单单只是提供user和passwd，必须要封装成完整的http包才行，但问题在于你不可能一个一个去手点，所以在爆破之前我们需要先去获取爆破软件构建http包所需要的参数，这就是我们为什么先用无效密码加F12（或burp suite等）去抓包收集信息的原因。将收集到的信息（比如cookie，referer、Get/Post等）交给爆破软件来构造http包进行爆破攻击。</p>
-</blockquote>
-<h2 id="爆破登录DVWA第一关"><a href="#爆破登录DVWA第一关" class="headerlink" title="爆破登录DVWA第一关"></a>爆破登录DVWA第一关</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><blockquote>
-<p>先使用任意无效账号密码尝试登录，并使用firefoxF12进行抓包分析。<br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard.png" alt=""><br>再看看其他信息。cookie，referer等都是我们需要的。<br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard2.png" alt=""><br>可以看到参数里面除了username和password外还有token。这好像是用来防止CSRF的。<br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard3.png" alt=""></p>
-</blockquote>
-<h3 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h3><blockquote>
-<p>主要信息收集完毕，接下来打开bruter软件。<br>相关教程：<a href="http://cstriker1407.info/blog/use-windows-bruter-brute-dvwa/" target="_blank" rel="external">windows下使用Bruter暴力破解DVWA</a><br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard4.png" alt=""></p>
-<p>填好一下信息</p>
-</blockquote>
-<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard5.png" alt=""> </p>
-<blockquote>
-<p>或者直接填入”网址“，再点击载入就可以自动生成相关信息。当然判断信息（请求测试）还是得自己填写。</p>
-</blockquote>
-<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard6.png" alt=""></p>
-<blockquote>
-<p>ps:注意bruter字典路径似乎不支持中文路径。笔者这里使用中文路径会报错。</p>
-<p>然后就到了最重要的一步，开始破解：</p>
-</blockquote>
-<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard7.png" alt=""></p>
-<blockquote>
-<p>麻痹的，开始破解之后发现在软件看来任何一个username/password都是正确的！笔者在这里折腾了一下午，各种查资料都没能解决。实在坚持不下去了，以后有时间再返回来重新试试吧。（立flag!）不过还好算是弄清楚了原理。<br>所以转而使用更加强大的一款软件<strong>WebCruiser Web Vulnerability Scanner</strong> </p>
-</blockquote>
-<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard8.png" alt=""><br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard9.png" alt=""><br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard10.png" alt=""></p>
-<blockquote>
-<p>怎么样，WebCruiser Web Vulnerability Scanner 是不是要简单很多？反正笔者这里觉得简单很多而且成功了。</p>
-</blockquote>
-<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_3_bruterclipboard11.png" alt=""></p>
-<blockquote>
-<p>DVWA第一关，爆破登录成功！</p>
-</blockquote>
+<h1 id="3P原则"><a href="#3P原则" class="headerlink" title="3P原则"></a>3P原则</h1><p>记住 3P 原则，您便记住了在路由器上应用 ACL 的一般规则。您可以为每种协议 (per protocol)、每个方向 (per direction)、每个接口 (per interface) 配置一个 ACL:</p>
+<ul>
+<li><p>每种协议一个 ACL:要控制接口上的流量，必须为接口上启用的每种协议定义相应的 ACL。</p>
+</li>
+<li><p>每个方向一个 ACL :一个 ACL 只能控制接口上一个方向的流量。要控制入站流量和出站流量，必须分别定义两个 ACL。</p>
+</li>
+<li><p>每个接口一个 ACL :一个 ACL 只能控制一个接口(例如快速以太网0/0)上的流量。</p>
+</li>
+</ul>
+<p>ACL 的编写可能相当复杂而且极具挑战性。每个接口上都可以针对多种协议和各个方向进行定义。</p>
+<h1 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h1><p>一个端口执行哪条ACL，这需要按照列表中的条件语句执行顺序来判断。如果一个数据包的报头跟表中某个条件判断语句相匹配，那么后面的语句就将被忽略，不再进行检查。</p>
+<p>数据包只有在跟第一个判断条件不匹配时，它才被交给ACL中的下一个条件判断语句进行比较。如果匹配(假设为允许发送)，则不管是第一条还是最后一条语句，数据都会立即发送到目的接口。如果所有的ACL判断语句都检测完毕，仍没有匹配的语句出口，则该数据包将视为被拒绝而被丢弃。这里要注意，ACL不能对本路由器产生的数据包进行控制。</p>
+<p>如果设备使用了TCAM，比如aute U3052交换机，那么所有的ACL是并行执行的。举例来说，如果一个端口设定了多条ACL规则，并不是逐条匹配，而是一次执行所有ACL语句。</p>
 
       
     </div>
@@ -492,8 +434,8 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/25/十大渗透测试系统/" rel="next" title="十大渗透测试演练系统">
-                <i class="fa fa-chevron-left"></i> 十大渗透测试演练系统
+              <a href="/2017/05/07/抛开select利用insert，update和delete注入/" rel="next" title="抛开select利用insert，update和delete注入">
+                <i class="fa fa-chevron-left"></i> 抛开select利用insert，update和delete注入
               </a>
             
           </div>
@@ -501,10 +443,6 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/07/CTF实验吧做题记录/" rel="prev" title="CTF实验吧做题记录">
-                CTF实验吧做题记录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -659,7 +597,7 @@ web类安全工具需要一个强大的爬虫爬取目标网站的所有页面�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP基础"><span class="nav-number">1.</span> <span class="nav-text">HTTP基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理介绍："><span class="nav-number">2.</span> <span class="nav-text">原理介绍：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爆破登录DVWA第一关"><span class="nav-number">3.</span> <span class="nav-text">爆破登录DVWA第一关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信息收集"><span class="nav-number">3.1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际操作"><span class="nav-number">3.2.</span> <span class="nav-text">实际操作</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#功能"><span class="nav-number">1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3P原则"><span class="nav-number">2.</span> <span class="nav-text">3P原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行过程"><span class="nav-number">3.</span> <span class="nav-text">执行过程</span></a></li></ol></div>
             
 
           </div>
