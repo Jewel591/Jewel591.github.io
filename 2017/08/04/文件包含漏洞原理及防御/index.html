@@ -1,0 +1,833 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="一、文件包含漏洞简介程序开发人员一般会把重复使用的函数写到单个文件中，需要使用某个函数时直接调用此文件，而无需再次编写，这中文件调用的过程一般被称为文件包含。
+程序开发人员一般希望代码更灵活，所以将被包含的文件设置为变量，用来进行动态调用，但正是由于这种灵活性，从而导致客户端可以调用一个恶意文件，而我们可以构造这个恶意文件来达到邪恶的目的，造成文件包含漏洞。
+常见的文件包含相关函数有： inclu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件包含漏洞原理及防御">
+<meta property="og:url" content="http://Jewel591.github.io/2017/08/04/文件包含漏洞原理及防御/index.html">
+<meta property="og:site_name" content="J'S BLOG">
+<meta property="og:description" content="一、文件包含漏洞简介程序开发人员一般会把重复使用的函数写到单个文件中，需要使用某个函数时直接调用此文件，而无需再次编写，这中文件调用的过程一般被称为文件包含。
+程序开发人员一般希望代码更灵活，所以将被包含的文件设置为变量，用来进行动态调用，但正是由于这种灵活性，从而导致客户端可以调用一个恶意文件，而我们可以构造这个恶意文件来达到邪恶的目的，造成文件包含漏洞。
+常见的文件包含相关函数有： inclu">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB2.png">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB3.png">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB4.png">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB5.png">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB7.png">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB8.png">
+<meta property="og:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB9.png">
+<meta property="og:updated_time" content="2017-08-04T10:23:08.755Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文件包含漏洞原理及防御">
+<meta name="twitter:description" content="一、文件包含漏洞简介程序开发人员一般会把重复使用的函数写到单个文件中，需要使用某个函数时直接调用此文件，而无需再次编写，这中文件调用的过程一般被称为文件包含。
+程序开发人员一般希望代码更灵活，所以将被包含的文件设置为变量，用来进行动态调用，但正是由于这种灵活性，从而导致客户端可以调用一个恶意文件，而我们可以构造这个恶意文件来达到邪恶的目的，造成文件包含漏洞。
+常见的文件包含相关函数有： inclu">
+<meta name="twitter:image" content="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '4SFMLLBPVN',
+      apiKey: 'dd14fff9f203e2f57b265046589d604c',
+      indexName: 'hexo_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://Jewel591.github.io/2017/08/04/文件包含漏洞原理及防御/"/>
+
+
+
+
+
+  <title> 文件包含漏洞原理及防御 | J'S BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">J'S BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">求知若饥 虚怀若愚</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://Jewel591.github.io/2017/08/04/文件包含漏洞原理及防御/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jewel591">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/portrait.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="J'S BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                文件包含漏洞原理及防御
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-04T17:37:18+08:00">
+                2017-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/基础原理/" itemprop="url" rel="index">
+                    <span itemprop="name">基础原理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、文件包含漏洞简介"><a href="#一、文件包含漏洞简介" class="headerlink" title="一、文件包含漏洞简介"></a>一、文件包含漏洞简介</h2><p>程序开发人员一般会把重复使用的函数写到单个文件中，需要使用某个函数时直接调用此文件，而无需再次编写，这中文件调用的过程一般被称为文件包含。</p>
+<p>程序开发人员一般希望代码更灵活，所以将被包含的文件设置为变量，用来进行动态调用，<br>但正是由于这种灵活性，从而导致客户端可以调用一个恶意文件，而我们可以构造这个恶意文件来达到邪恶的目的，造成文件包含漏洞。</p>
+<p>常见的文件包含相关函数有： <code>include() require() include_once() require_once()</code>.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">include()：执行到include时才包含文件，找不到被包含文件时只会产生警告，代码会继续执行 </div><div class="line">require()：程序开始运行就预先包含文件，找不到被包含的文件时会产生致命错误，并停运行</div><div class="line">include_once()和require_once()：功能和上面一样，但文件中代码已被包含则不会再次包含</div></pre></td></tr></table></figure></p>
+<p>文件包含漏洞分类：</p>
+<ul>
+<li><p>本地文件包含：包含本地文件，主要出现在模块加载、模板加载和cache调用之处.</p>
+</li>
+<li><p>远程文件包含：包含的文件位于远程服务器上，需要设置<code>allow_url_include = on</code>.</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="二、文件包含漏洞原理"><a href="#二、文件包含漏洞原理" class="headerlink" title="二、文件包含漏洞原理"></a>二、文件包含漏洞原理</h2><h3 id="2-1-本地文件包含漏洞实例"><a href="#2-1-本地文件包含漏洞实例" class="headerlink" title="2.1  本地文件包含漏洞实例"></a>2.1  本地文件包含漏洞实例</h3><p>如果对可控GET参数未过滤，我们就可以任意包含主机上的其它敏感文件。<br>无私辩不足以明理，无案例不足以求真，接下来我们通过实例来理解一下：<code>什么是文件包含漏洞？</code></p>
+<p>fileinclude.php代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">if (isset($_GET[&apos;file&apos;])) &#123;</div><div class="line">	include($_GET[&apos;file&apos;]);</div><div class="line">&#125;</div><div class="line">else&#123;</div><div class="line">	echo &quot;使用 file 参数包含文件&quot;;</div><div class="line">&#125;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>代码很简单，想必只要学过一点php的朋友都能够很清楚的理解这段代码。<br>该页面可用通过get方式接收用户输入的file参数。<br>同一目录下还存在页面：file.php:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#file.php</div><div class="line">&lt;?php</div><div class="line">echo &apos;你已成功加载file.php&apos;;</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p>接下来我们尝试输入<code>?file=file.php</code>加载同目录下的file.php文件中的代码 :</p>
+<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB2.png" alt="image"></p>
+<p>可以看到成功执行了file.php文件中的代码，这里只是一个简单的输出语句，但如果file.php中的代码是一些通用的函数模块，这无疑会给开发者代码非常大的便捷，而且后期修改也不用到每个文件中修改，只需修改file.php就可以了。<br>但是这里未对用户的输入过滤，所以会出现意料之外的危险。<br>输入<code>?file=/etc/passwd</code>（linux服务器）:</p>
+<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB3.png" alt="此处输入图片的描述"><br>成功加载etc目录下的passwd文件。<br>这就是所谓的本地文件包含漏洞，很好理解吧！<br>值得注意的是，<strong>被包含的文件无论是不是以<code>.php</code>结尾，服务器都会以php代码的方式解析它。</strong><br>比如我们将<code>file.php</code>改为<code>file.txt</code>,只要里面的内容是 php 代码，那么同样可以执行。</p>
+<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB4.png" alt="image"></p>
+<p>这个特点使得文件包含漏洞经常和文件上传漏洞结合使用。<br>比如有些地方可以上传头像，图片等，但是由于上传的限制，一般只能上传jpg，png的图片格式，代码无法被直接加载执行，所以这里先上传<code>.jpg .png</code>等结尾的图片，图片的内容为一句话木马，然后通过本地文件包含的方式将图片包含进来，代码就执行了。</p>
+<h3 id="2-2-远程文件包含漏洞"><a href="#2-2-远程文件包含漏洞" class="headerlink" title="2.2 远程文件包含漏洞"></a>2.2 远程文件包含漏洞</h3><p>如果目标主机的<code>allow_url_fopen</code>是激活的（默认是激活的），我们就可以有更大的利用空间，我们可以指定其它URL上的一个包含PHP代码的文件来运行。</p>
+<p>同样不需要后缀名是php的格式，只要内容是代码就可以。</p>
+<p>另一台服务器上面存放了info.txt文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#info.txt</div><div class="line">&lt;?php</div><div class="line">phpinfo();</div><div class="line">?&gt;</div></pre></td></tr></table></figure></p>
+<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB5.png" alt="此处输入图片的描述"><br>可以看到<code>info.txt</code>中的代码被成功执行,返回了phpinfo.<br>这就是所谓的远程文件包含漏洞了！</p>
+<h2 id="三、文件包含漏洞的防御"><a href="#三、文件包含漏洞的防御" class="headerlink" title="三、文件包含漏洞的防御"></a>三、文件包含漏洞的防御</h2><p>文件包含漏洞的防御主要是用代码和配置两方面入手。<br>从代码层来讲，在开发过程中应该尽量避免动态的变量，尤其是用户可以控制的变量。<br>至于具体的防御主要有两种方法：</p>
+<ul>
+<li>采用<code>白名单</code>的方式将允许包含的文件列出来，只允许包含白名单中的文件，这样就可以避免任意文件包含的风险。</li>
+<li>采用<code>白名单</code>的方式将文件包含漏洞利用过程中的一些特殊字符定义在黑名单中，对传入的参数进行过滤，但这样有时会因为过滤不全，导致被有经验的攻击者绕过。</li>
+</ul>
+<p>接下来我们来尝试对fileinclude.php进行修改：</p>
+<h3 id="3-1-代码层面防御："><a href="#3-1-代码层面防御：" class="headerlink" title="3.1 代码层面防御："></a>3.1 代码层面防御：</h3><h4 id="3-1-1-黑名单验证："><a href="#3-1-1-黑名单验证：" class="headerlink" title="3.1.1 黑名单验证："></a>3.1.1 黑名单验证：</h4><p>修改之后的代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">    <span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'file'</span>])) &#123;</div><div class="line">	$file = $_GET[<span class="string">'file'</span>];</div><div class="line">	$file = str_replace(<span class="string">"http:"</span>, <span class="string">""</span>, $file);</div><div class="line">	$file = str_replace(<span class="string">"https:"</span>, <span class="string">""</span>, $file);</div><div class="line">	<span class="keyword">include</span>($file);</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span>&#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"使用 file 参数包含文件"</span>;</div><div class="line">&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>通过<code>str_replace()</code>函数将用户传来的数据进行了替换，主要是将<code>http:</code>和<code>https://</code>都替换成了空，这种替换主要是针对远程文件包含。</p>
+<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB7.png" alt="此处输入图片的描述"><br>可以看到此时远程文件包含已经成功过滤掉。</p>
+<h4 id="4-1-2-白名单验证："><a href="#4-1-2-白名单验证：" class="headerlink" title="4.1.2 白名单验证："></a>4.1.2 白名单验证：</h4><p>修改后的代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">    <span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'file'</span>])) &#123;</div><div class="line">	$file = $_GET[<span class="string">'file'</span>];</div><div class="line">	<span class="keyword">if</span>($file != <span class="string">"right.php"</span>)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"错误！不能加载此文件！"</span>;</div><div class="line">		<span class="keyword">exit</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">include</span>($file);</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span>&#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">"使用 file 参数包含文件"</span>;</div><div class="line">&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>通过白名单的方式对用户传来的数据进行验证，只允许包含<code>right.php</code>文件，如果不是<code>right.php</code>则打印错误。</p>
+<p><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB8.png" alt="image"><br><img src="http://oncunzs2y.bkt.clouddn.com/img/jpg/github.pages_fileinclude%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB9.png" alt="image"></p>
+<p>当然关于白名单和黑名单验证的实现方式有很多，这里只是起到一个抛砖引玉的作用，有兴趣的同学可以继续做深入学习。</p>
+<h3 id="4-2-配置层面防御"><a href="#4-2-配置层面防御" class="headerlink" title="4.2 配置层面防御"></a>4.2 配置层面防御</h3><p>通过在<code>php.ini</code>中设置<code>allow_url_fopen = off</code>、<code>allow_url_fopen = off</code>，可以有效的防御远程文件包含漏洞。<br>至于本地文件包含则主要从代码层面进行防御。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天文件包含漏洞的简单讲解就点到为止，关于文件包含漏洞的进阶利用、截断等日后有时间再做讲解吧！那，你是否已经理解<code>什么是文件包含漏洞</code>了呢？</p>
+<p>记 2017/8/4</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/07/Docker基础教程/" rel="next" title="Docker命令入门">
+                <i class="fa fa-chevron-left"></i> Docker命令入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait.jpg"
+               alt="Jewel591" />
+          <p class="site-author-name" itemprop="name">Jewel591</p>
+           
+              <p class="site-description motion-element" itemprop="description">原创和转载</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Jewel591" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://superkieran.github.io/WooyunDrops/#!/" target="_blank" title="乌云">
+                  
+                    <i class="fa fa-fw fa-wooyun"></i>
+                  
+                  乌云
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=579954&auto=0&height=32"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=3413895&auto=1&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=40257471&auto=0&height=32"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=2175282&auto=0&height=32"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=30245039&auto=0&height=32"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=5260494&auto=0&height=32"></iframe>
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、文件包含漏洞简介"><span class="nav-number">1.</span> <span class="nav-text">一、文件包含漏洞简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、文件包含漏洞原理"><span class="nav-number">2.</span> <span class="nav-text">二、文件包含漏洞原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-本地文件包含漏洞实例"><span class="nav-number">2.1.</span> <span class="nav-text">2.1  本地文件包含漏洞实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-远程文件包含漏洞"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 远程文件包含漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、文件包含漏洞的防御"><span class="nav-number">3.</span> <span class="nav-text">三、文件包含漏洞的防御</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-代码层面防御："><span class="nav-number">3.1.</span> <span class="nav-text">3.1 代码层面防御：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-黑名单验证："><span class="nav-number">3.1.1.</span> <span class="nav-text">3.1.1 黑名单验证：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-白名单验证："><span class="nav-number">3.1.2.</span> <span class="nav-text">4.1.2 白名单验证：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-配置层面防御"><span class="nav-number">3.2.</span> <span class="nav-text">4.2 配置层面防御</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017/3/23 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jewel591</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
